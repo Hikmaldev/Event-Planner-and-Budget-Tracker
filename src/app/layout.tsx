@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Event Planner and Budget Tracker",
   description:
     "Track vendors, Rupiah budgets, pre-event checklists, and H-day timelines in one place.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#3B5BDB",
 };
 
 export default function RootLayout({
