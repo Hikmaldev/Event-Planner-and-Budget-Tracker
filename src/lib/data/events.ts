@@ -297,13 +297,18 @@ export async function deleteEvent(
 
   // Ordered deletes keep the VendorCategory -> Vendor/BudgetEntry RESTRICT
   // constraints satisfied while Event -> children cascades remain the safety net.
-  await prisma.$transaction([
-    prisma.checklistTask.deleteMany({ where: { eventId } }),
-    prisma.budgetEntry.deleteMany({ where: { eventId } }),
-    prisma.vendor.deleteMany({ where: { eventId } }),
-    prisma.vendorCategory.deleteMany({ where: { eventId } }),
-    prisma.event.delete({ where: { id: eventId } }),
-  ]);
+  // Interactive transaction with an explicit timeout: a Neon cold start can push
+  // past the 5s default, especially when running from serverless functions.
+  await prisma.$transaction(
+    async (tx) => {
+      await tx.checklistTask.deleteMany({ where: { eventId } });
+      await tx.budgetEntry.deleteMany({ where: { eventId } });
+      await tx.vendor.deleteMany({ where: { eventId } });
+      await tx.vendorCategory.deleteMany({ where: { eventId } });
+      await tx.event.delete({ where: { id: eventId } });
+    },
+    { timeout: 20_000, maxWait: 10_000 }
+  );
 
   return ok(undefined);
 }
