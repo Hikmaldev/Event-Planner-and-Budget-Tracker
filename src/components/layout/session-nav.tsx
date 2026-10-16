@@ -10,29 +10,24 @@ export async function SessionNav() {
   const user = await getCurrentUser();
 
   if (!user) {
-    return (
-      <>
-        <Link
-          href="/login"
-          className="text-muted-foreground hover:text-foreground transition-colors"
-        >
-          Log In / Register
-        </Link>
-        <Link
-          href="/reset-password"
-          className="text-muted-foreground hover:text-foreground transition-colors"
-        >
-          Password Reset
-        </Link>
-      </>
-    );
+    // Public screens (login, password reset) carry their own navigation,
+    // so the header stays clean for signed-out visitors.
+    return null;
   }
 
   return (
-    <form action={logoutAction}>
-      <Button type="submit" variant="ghost" size="sm" data-action-id="ACT-32">
-        Logout
-      </Button>
-    </form>
+    <>
+      <Link
+        href="/events"
+        className="text-muted-foreground hover:text-foreground transition-colors"
+      >
+        Events Dashboard
+      </Link>
+      <form action={logoutAction}>
+        <Button type="submit" variant="ghost" size="sm" data-action-id="ACT-32">
+          Logout
+        </Button>
+      </form>
+    </>
   );
 }

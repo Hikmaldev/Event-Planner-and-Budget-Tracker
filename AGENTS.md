@@ -12,7 +12,7 @@
 
 ## Arsitektur
 - Alur: App Router UI (`src/app`, `src/components`) → Server Actions (`src/app/actions`) → lapisan data (`src/lib/data`) → Prisma → Neon. Domain murni di `src/lib/domain` (budget, payment, timeline) — satu sumber kebenaran untuk perhitungan, dipakai data layer dan test.
-- Header di `src/app/layout.tsx` membaca sesi Auth.js untuk menampilkan tombol Logout hanya saat login; layout dipaksa request-time dengan `await connection()` — pertahankan pola ini saat mengubah header.
+- Header (`src/app/layout.tsx` + `SessionNav` di dalam `<Suspense>`): saat belum login hanya brand yang tampil (halaman login/reset punya navigasinya sendiri); navigasi "Events Dashboard" + tombol Logout hanya muncul setelah login. Pertahankan `await connection()` di `SessionNav` — `auth()` tidak boleh berjalan saat prerender.
 - Kepemilikan data: `Event.ownerId`; tabel anak memakai `eventId` (warisan). Constraint lintas-event ada di database: `Vendor`/`BudgetEntry` memakai composite FK `(categoryId, eventId)` ke `VendorCategory(id, eventId)`.
 - Keputusan yang sudah diambil: `amountPaid = 0` → `UNPAID`; `0 < amountPaid < agreedPrice` → `DOWN_PAYMENT`; selain itu `PAID_IN_FULL` (berlaku juga saat `agreedPrice = 0`). Task timeline memakai milestone terdekat; seri → milestone lebih awal. Hapus event memakai transaksi berurutan (task → entry → vendor → kategori → event) agar constraint `Restrict` aman.
 - Detail review: `docs/data-contract.md`.

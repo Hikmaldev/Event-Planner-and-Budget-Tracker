@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
 import { SessionNav } from "@/components/layout/session-nav";
-import { Skeleton } from "@/components/ui/skeleton";
 import "./globals.css";
 
 const inter = Inter({
@@ -42,17 +41,7 @@ export default function RootLayout({
               aria-label="Primary navigation"
               className="flex items-center gap-4 type-body"
             >
-              <Link
-                href="/events"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Events Dashboard
-              </Link>
-              <Suspense
-                fallback={
-                  <Skeleton className="h-8 w-24" aria-hidden="true" />
-                }
-              >
+              <Suspense fallback={null}>
                 <SessionNav />
               </Suspense>
             </nav>
