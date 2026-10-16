@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-budget-under: var(--budget-under);
+  --color-budget-near: var(--budget-near);
+  --color-budget-over: var(--budget-over);
+
+  --color-contract-negotiating: var(--contract-negotiating);
+  --color-contract-active: var(--contract-active);
+  --color-contract-cancelled: var(--contract-cancelled);
+
+  --color-payment-unpaid: var(--payment-unpaid);
+  --color-payment-partial: var(--payment-partial);
+  --color-payment-complete: var(--payment-complete);
+
+  --color-task-upcoming: var(--task-upcoming);
+  --color-task-overdue: var(--task-overdue);
+  --color-task-complete: var(--task-complete);
+
+  --color-timeline-past: var(--timeline-past);
+  --color-timeline-current: var(--timeline-current);
+  --color-timeline-future: var(--timeline-future);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+}
+
+:root {
+  --radius: 10px;
+
+  --foreground: #18181B;
+  --muted-foreground: #71717A;
+  --background: #FFFFFF;
+  --card: #FFFFFF;
+  --card-foreground: #18181B;
+  --popover: #FFFFFF;
+  --popover-foreground: #18181B;
+  --border: #E4E4E7;
+  --input: #E4E4E7;
+  --primary: #3B5BDB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F4F4F5;
+  --secondary-foreground: #18181B;
+  --muted: #F4F4F5;
+  --accent: #F4F4F5;
+  --accent-foreground: #18181B;
+  --destructive: #C0362C;
+  --ring: #3B5BDB;
+
+  --budget-under: #1A7F4C;
+  --budget-near: #B8860B;
+  --budget-over: #C0362C;
+
+  --contract-negotiating: #71717A;
+  --contract-active: #3B5BDB;
+  --contract-cancelled: #A1A1AA;
+
+  --payment-unpaid: #C0362C;
+  --payment-partial: #B8860B;
+  --payment-complete: #1A7F4C;
+
+  --task-upcoming: #71717A;
+  --task-overdue: #C0362C;
+  --task-complete: #1A7F4C;
+
+  --timeline-past: #E4E4E7;
+  --timeline-current: #3B5BDB;
+  --timeline-future: #A1A1AA;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  .type-metric-xl {
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .type-heading-lg {
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .type-heading-sm {
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .type-body {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .type-body-numeric {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .type-caption {
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 400;
+  }
+}

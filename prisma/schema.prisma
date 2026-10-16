@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ContractStatus {
+  NEGOTIATING
+  CONTRACTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  DOWN_PAYMENT
+  PAID_IN_FULL
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  passwordHash        String?
+  name                String?
+  createdAt           DateTime             @default(now())
+  events              Event[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Event {
+  id                String   @id @default(cuid())
+  ownerId           String
+  owner             User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  name              String
+  eventDate         DateTime
+  location          String?
+  totalTargetBudget Decimal  @db.Decimal(14, 2)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  categories     VendorCategory[]
+  vendors        Vendor[]
+  budgetEntries  BudgetEntry[]
+  checklistTasks ChecklistTask[]
+
+  @@index([ownerId])
+}
+
+model VendorCategory {
+  id            String  @id @default(cuid())
+  eventId       String
+  event         Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name          String
+  plannedBudget Decimal @db.Decimal(14, 2)
+  isDefault     Boolean @default(false)
+
+  vendors       Vendor[]
+  budgetEntries BudgetEntry[]
+
+  @@unique([id, eventId])
+  @@index([eventId])
+}
+
+model Vendor {
+  id             String         @id @default(cuid())
+  eventId        String
+  event          Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  categoryId     String
+  category       VendorCategory @relation(fields: [categoryId, eventId], references: [id, eventId], onDelete: Restrict)
+  name           String
+  contactInfo    String?
+  notes          String?
+  agreedPrice    Decimal        @db.Decimal(14, 2)
+  contractStatus ContractStatus @default(NEGOTIATING)
+  paymentStatus  PaymentStatus  @default(UNPAID)
+  amountPaid     Decimal        @default(0) @db.Decimal(14, 2)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  checklistTasks ChecklistTask[]
+
+  @@index([eventId])
+  @@index([categoryId])
+}
+
+model BudgetEntry {
+  id          String         @id @default(cuid())
+  eventId     String
+  event       Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    VendorCategory @relation(fields: [categoryId, eventId], references: [id, eventId], onDelete: Restrict)
+  description String
+  amount      Decimal        @db.Decimal(14, 2)
+  createdAt   DateTime       @default(now())
+
+  @@index([eventId])
+  @@index([categoryId])
+}
+
+model ChecklistTask {
+  id          String    @id @default(cuid())
+  eventId     String
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  vendorId    String?
+  vendor      Vendor?   @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  title       String
+  description String?
+  deadline    DateTime
+  isComplete  Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([eventId])
+  @@index([vendorId])
+}
