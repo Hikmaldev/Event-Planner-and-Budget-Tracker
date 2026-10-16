@@ -82,7 +82,7 @@ export function LoginRegisterForm({
             </div>
 
             {demoCredentials ? (
-              <div className="flex items-center justify-between gap-2 rounded-sm border border-dashed border-border bg-muted/40 px-3 py-2">
+              <div className="flex items-center justify-between gap-3 rounded-sm border border-dashed border-primary/30 bg-primary/5 px-3 py-2">
                 <span className="type-caption text-muted-foreground">
                   Akun demo untuk review lokal
                 </span>
